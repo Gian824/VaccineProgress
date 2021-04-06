@@ -36,33 +36,37 @@ pre_vaccines = pd.read_csv(url)
 
 # In the dataset, there are many coppies of Countries with data recorded from different dates.
 # I need to get rid of these duplicates in order to gain accurate data.
+
 vaccines = pre_vaccines.groupby(["location",'iso_code'])['total_vaccinations','people_vaccinated','people_fully_vaccinated','daily_vaccinations_raw',
                                            'daily_vaccinations','total_vaccinations_per_hundred','people_vaccinated_per_hundred',
                                            "people_fully_vaccinated_per_hundred",'daily_vaccinations_per_million'].max().reset_index()
 pd.reset_option('all')
-vaccines
+display(vaccines)
 
 # There's alot of data that show's up with NaN. In order to counter this, I need to converet all missing data into 0.
 # I also converted many of the categories into integers to simplify calculations.
-vaccines.fillna(value = 0, inplace = True)
-vaccines.total_vaccinations = vaccines.total_vaccinations.astype(int)
-vaccines.people_vaccinated = vaccines.people_vaccinated.astype(int)
-vaccines.people_fully_vaccinated = vaccines.people_fully_vaccinated.astype(int)
+def show_raw():
+  vaccines.fillna(value = 0, inplace = True)
+  vaccines.total_vaccinations = vaccines.total_vaccinations.astype(int)
+  vaccines.people_vaccinated = vaccines.people_vaccinated.astype(int)
+  vaccines.people_fully_vaccinated = vaccines.people_fully_vaccinated.astype(int)
 
-vaccines.daily_vaccinations_raw = vaccines.daily_vaccinations_raw.astype(int)
-vaccines.daily_vaccinations = vaccines.daily_vaccinations.astype(int)
-vaccines.total_vaccinations_per_hundred = vaccines.total_vaccinations_per_hundred.astype(int)
+  vaccines.daily_vaccinations_raw = vaccines.daily_vaccinations_raw.astype(int)
+  vaccines.daily_vaccinations = vaccines.daily_vaccinations.astype(int)
+  vaccines.total_vaccinations_per_hundred = vaccines.total_vaccinations_per_hundred.astype(int)
 
-vaccines.people_fully_vaccinated_per_hundred = vaccines.people_fully_vaccinated_per_hundred.astype(int)
-vaccines.daily_vaccinations_per_million = vaccines.daily_vaccinations_per_million.astype(int)
-vaccines.people_vaccinated_per_hundred = vaccines.people_vaccinated_per_hundred.astype(int)
+  vaccines.people_fully_vaccinated_per_hundred = vaccines.people_fully_vaccinated_per_hundred.astype(int)
+  vaccines.daily_vaccinations_per_million = vaccines.daily_vaccinations_per_million.astype(int)
+  vaccines.people_vaccinated_per_hundred = vaccines.people_vaccinated_per_hundred.astype(int)
 
 # At the end of the list includes the summary of the entire world that is not needed so I removed it.
-n = 1
-vaccines.drop(vaccines.tail(n).index, 
+  n = 2
+  vaccines.drop(vaccines.tail(n).index, 
         inplace = True)
 
-vaccines
+  display(vaccines)
+  print ("working")
+show_raw()
 
 # Created X, Y variable to host portion of datasets
 X = vaccines.total_vaccinations.values.reshape(-1, 1)
@@ -78,18 +82,20 @@ plt.figure(figsize=(100,90))
 plt.show
 
 # Begining of Code for Linear Regression Model
-reg = LinearRegression()
-reg.fit(X, Y)
-Y_pred = reg.predict(X)
+def model():
+  reg = LinearRegression()
+  reg.fit(X, Y)
+  Y_pred = reg.predict(X)
 
-plt.scatter(X, Y, color='blue')
-plt.plot(X, Y_pred, color='red')
-plt.title('Total Vaccinations vs. People Vaccincated')
-plt.xlabel('Total Vaccinations (In 10 Million)')
-plt.ylabel('People Vaccinated (In 10 Million)')
+  plt.scatter(X, Y, color='blue')
+  plt.plot(X, Y_pred, color='red')
+  plt.title('Total Vaccinations vs. People Vaccincated')
+  plt.xlabel('Total Vaccinations (In 10 Million)')
+  plt.ylabel('People Vaccinated (In 10 Million)')
 
-plt.figure(figsize=(100,90))
-plt.show()
+  plt.figure(figsize=(100,90))
+  plt.show()
+model()
 
 # With this we can see the trend line for the linear regression model. 
 # This allowes us to achieve our goal of separating, plus it allows us to predict 
