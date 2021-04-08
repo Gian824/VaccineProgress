@@ -10,14 +10,14 @@ info:
     name: Apache
   version: 0.0-oas3
 servers:
-- url: http://localhost:8080/VaccineProgress
+- url: 'http://localhost:8080'
 paths:
   /raw:
     get:
       tags:
       - RAW
       description: Returns the raw data of the entire dataset including all countries and all data.
-      operationId: VaccineProgress.show_raw
+      operationId: VaccineProgress.raw
       responses:
         "200":
           description: Gathers raw data and cleanses to create accurate raw data for our model
@@ -33,6 +33,18 @@ paths:
       responses:
         "200":
           description: Calculates and displays the final verdict for if a country requires assistance or not.
+          content:
+            application/json:
+              schema: {}
+  /test:
+    get:
+      tags:
+      - TEST
+      description: test
+      operationId: VaccineProgress.test
+      responses:
+        "200":
+          description: test
           content:
             application/json:
               schema: {}

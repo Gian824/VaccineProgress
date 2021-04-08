@@ -11,7 +11,7 @@ docker-alli: docker-build docker-inter
 
 docker-build:
 	@echo "building the image from docker file..."
-	docker build --no-cache --pull -t svmiris .
+	docker build --pull -t svmiris .
 	@echo "image DONE"
 
 docker-start:

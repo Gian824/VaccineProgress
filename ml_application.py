@@ -45,7 +45,28 @@ display(vaccines)
 
 # There's alot of data that show's up with NaN. In order to counter this, I need to converet all missing data into 0.
 # I also converted many of the categories into integers to simplify calculations.
-def show_raw():
+def test():
+  print("This is a test, and the server is running well!")
+  
+def raw():
+  import pandas as pd
+  import numpy as np
+  import matplotlib.pyplot as plt
+  from sklearn.linear_model import LinearRegression
+  import math
+
+  # import datasets
+  url = 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv'
+  pre_vaccines = pd.read_csv(url)
+  # vaccines = vaccines.drop(vaccines[vaccines.total_vaccinations.isna()].index)
+
+  # In the dataset, there are many coppies of Countries with data recorded from different dates.
+  # I need to get rid of these duplicates in order to gain accurate data.
+
+  vaccines = pre_vaccines.groupby(["location",'iso_code'])['total_vaccinations','people_vaccinated','people_fully_vaccinated','daily_vaccinations_raw',
+                                             'daily_vaccinations','total_vaccinations_per_hundred','people_vaccinated_per_hundred',
+                                             "people_fully_vaccinated_per_hundred",'daily_vaccinations_per_million'].max().reset_index()
+  pd.reset_option('all')
   vaccines.fillna(value = 0, inplace = True)
   vaccines.total_vaccinations = vaccines.total_vaccinations.astype(int)
   vaccines.people_vaccinated = vaccines.people_vaccinated.astype(int)
@@ -66,7 +87,7 @@ def show_raw():
 
   display(vaccines)
   print ("working")
-show_raw()
+raw()
 
 # Created X, Y variable to host portion of datasets
 X = vaccines.total_vaccinations.values.reshape(-1, 1)
