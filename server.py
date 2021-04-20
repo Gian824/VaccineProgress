@@ -13,6 +13,7 @@ app.add_api("Gian824-VaccineProgressionAPI-0.0-oas3-resolved-2.yaml")
 @app.route("/")
 def home():
     msg = {"server-msg": "It's working!"}
+
     return jsonify(msg)
 
 

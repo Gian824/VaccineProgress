@@ -48,4 +48,29 @@ paths:
           content:
             application/json:
               schema: {}
+  /test2/<arg1>:
+    get:
+      tags:
+      - TEST2
+      description: test2
+      operationId: VaccineProgress.test2
+      responses:
+        "200":
+          description: test2
+          content:
+            application/json:
+              schema: {}
+  /Assistance/<arg1>:
+    get:
+      tags:
+      - TEST3
+      description: test3
+      operationId: VaccineProgress.test3
+      responses:
+        "200":
+          description: test3
+          content:
+            application/json:
+              schema: {}
+  
 components: {}

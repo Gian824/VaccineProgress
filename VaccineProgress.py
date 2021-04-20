@@ -23,11 +23,13 @@ In this project, I used a dataset that is continuously updated (daily). With thi
 
 # imports
 def items():
+  import simplejson as json
   import pandas as pd
   import numpy as np
   import matplotlib.pyplot as plt
   from sklearn.linear_model import LinearRegression
   import math
+  from IPython.display import display
 
   # import datasets
   url = 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv'
@@ -362,6 +364,188 @@ def test():
   # display(vaccines)
   return df_formatted
   # return df
+
+def test2(arg1):
+  import simplejson as json
+  import pandas as pd
+  import numpy as np
+  import matplotlib.pyplot as plt
+  from sklearn.linear_model import LinearRegression
+  import math
+  from IPython.display import display
+  arg1 = int(arg1)
+  # import datasets
+  url = 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv'
+  pre_vaccines = pd.read_csv(url)
+  # vaccines = vaccines.drop(vaccines[vaccines.total_vaccinations.isna()].index)
+
+  # In the dataset, there are many coppies of Countries with data recorded from different dates.
+  # I need to get rid of these duplicates in order to gain accurate data.
+
+  vaccines = pre_vaccines.groupby(["location",'iso_code'])['total_vaccinations','people_vaccinated','people_fully_vaccinated','daily_vaccinations_raw',
+                                             'daily_vaccinations','total_vaccinations_per_hundred','people_vaccinated_per_hundred',
+                                             "people_fully_vaccinated_per_hundred",'daily_vaccinations_per_million'].max().reset_index()
+  pd.reset_option('all')
+  vaccines.fillna(value = 0, inplace = True)
+  vaccines.total_vaccinations = vaccines.total_vaccinations.astype(int)
+  vaccines.people_vaccinated = vaccines.people_vaccinated.astype(int)
+  vaccines.people_fully_vaccinated = vaccines.people_fully_vaccinated.astype(int)
+
+  vaccines.daily_vaccinations_raw = vaccines.daily_vaccinations_raw.astype(int)
+  vaccines.daily_vaccinations = vaccines.daily_vaccinations.astype(int)
+  vaccines.total_vaccinations_per_hundred = vaccines.total_vaccinations_per_hundred.astype(int)
+
+  vaccines.people_fully_vaccinated_per_hundred = vaccines.people_fully_vaccinated_per_hundred.astype(int)
+  vaccines.daily_vaccinations_per_million = vaccines.daily_vaccinations_per_million.astype(int)
+  vaccines.people_vaccinated_per_hundred = vaccines.people_vaccinated_per_hundred.astype(int)
+
+# At the end of the list includes the summary of the entire world that is not needed so I removed it.
+  n = 2
+  vaccines.drop(vaccines.tail(n).index,
+        inplace = True)
+  
+  X = vaccines.total_vaccinations.values.reshape(-1, 1)
+  Y = vaccines.people_vaccinated.values.reshape(-1, 1)
+
+  reg = LinearRegression()
+  reg.fit(X, Y)
+  Y_pred = reg.predict(X)
+
+
+
+  # String used to assign Yes or No for the country's need of assistance
+  string = []
+  for i in range(len(vaccines)):
+    string.append("")
+
+  for i in range(len(vaccines)):
+    #if Y_pred[i] == 0:
+      #Y_pred[i] += 1
+    divide = X[i] / Y[i]
+    Regression = X[i] / Y_pred[i]
+  #  print(Y[i])
+  #  print(' ')
+  #  print(Y_pred[i])
+
+  # Determination of whether the country requires assistance or not
+    if math.inf > divide >= Regression:
+      string[i] = 'No'
+    elif divide < Regression:
+      string[i] = 'Yes'
+    else:
+      string[i] = 'Yes'
+
+  # Final variable final included a list of the countries with their final verdict of whether or not the require assistance
+  # with the distribution of the COVID vaccine
+
+  print("Countries that Require Assistance With Vaccine")
+  final = [0]*(len(vaccines))
+  i = 0
+  while i < len(final):
+      final[i] = vaccines.location[i], string[i]
+      i += 1
+  df2 = pd.set_option("display.max_rows", None, "display.max_columns", None)
+  df = pd.DataFrame(final, columns=["Country", "Assistance Needed?"])
+ 
+  df = df.iloc[arg1]
+  df = df.to_json(orient='index', indent=1)
+  df2 = json.loads(df)
+  df_formatted = json.dumps(df2, indent=1)
+
+  return df_formatted
+
+#Final Function
+def Assistance(arg1):
+  import simplejson as json
+  import pandas as pd
+  import numpy as np
+  import matplotlib.pyplot as plt
+  from sklearn.linear_model import LinearRegression
+  import math
+  from IPython.display import display
+
+  # import datasets
+  url = 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv'
+  pre_vaccines = pd.read_csv(url)
+  # vaccines = vaccines.drop(vaccines[vaccines.total_vaccinations.isna()].index)
+
+  # In the dataset, there are many coppies of Countries with data recorded from different dates.
+  # I need to get rid of these duplicates in order to gain accurate data.
+
+  vaccines = pre_vaccines.groupby(["location",'iso_code'])['total_vaccinations','people_vaccinated','people_fully_vaccinated','daily_vaccinations_raw',
+                                             'daily_vaccinations','total_vaccinations_per_hundred','people_vaccinated_per_hundred',
+                                             "people_fully_vaccinated_per_hundred",'daily_vaccinations_per_million'].max().reset_index()
+  pd.reset_option('all')
+  vaccines.fillna(value = 0, inplace = True)
+  vaccines.total_vaccinations = vaccines.total_vaccinations.astype(int)
+  vaccines.people_vaccinated = vaccines.people_vaccinated.astype(int)
+  vaccines.people_fully_vaccinated = vaccines.people_fully_vaccinated.astype(int)
+
+  vaccines.daily_vaccinations_raw = vaccines.daily_vaccinations_raw.astype(int)
+  vaccines.daily_vaccinations = vaccines.daily_vaccinations.astype(int)
+  vaccines.total_vaccinations_per_hundred = vaccines.total_vaccinations_per_hundred.astype(int)
+
+  vaccines.people_fully_vaccinated_per_hundred = vaccines.people_fully_vaccinated_per_hundred.astype(int)
+  vaccines.daily_vaccinations_per_million = vaccines.daily_vaccinations_per_million.astype(int)
+  vaccines.people_vaccinated_per_hundred = vaccines.people_vaccinated_per_hundred.astype(int)
+
+# At the end of the list includes the summary of the entire world that is not needed so I removed it.
+  n = 2
+  vaccines.drop(vaccines.tail(n).index,
+        inplace = True)
+  
+  X = vaccines.total_vaccinations.values.reshape(-1, 1)
+  Y = vaccines.people_vaccinated.values.reshape(-1, 1)
+
+  reg = LinearRegression()
+  reg.fit(X, Y)
+  Y_pred = reg.predict(X)
+
+
+
+  # String used to assign Yes or No for the country's need of assistance
+  string = []
+  for i in range(len(vaccines)):
+    string.append("")
+
+  for i in range(len(vaccines)):
+    #if Y_pred[i] == 0:
+      #Y_pred[i] += 1
+    divide = X[i] / Y[i]
+    Regression = X[i] / Y_pred[i]
+  #  print(Y[i])
+  #  print(' ')
+  #  print(Y_pred[i])
+
+  # Determination of whether the country requires assistance or not
+    if math.inf > divide >= Regression:
+      string[i] = 'No'
+    elif divide < Regression:
+      string[i] = 'Yes'
+    else:
+      string[i] = 'Yes'
+
+  # Final variable final included a list of the countries with their final verdict of whether or not the require assistance
+  # with the distribution of the COVID vaccine
+
+  print("Countries that Require Assistance With Vaccine")
+  final = [0]*(len(vaccines))
+  i = 0
+  while i < len(final):
+      final[i] = vaccines.location[i], string[i]
+      i += 1
+  df2 = pd.set_option("display.max_rows", None, "display.max_columns", None)
+  df = pd.DataFrame(final, columns=["Country", "Assistance Needed?"])
+ 
+
+  df = df.loc[df['Country'] == arg1]
+  df = df.to_json(orient='index', indent=1)
+  df2 = json.loads(df)
+  df_formatted = json.dumps(df2, indent=1)
+
+  return df_formatted
+
+  #Final Function
 
 """#END#"""
 
