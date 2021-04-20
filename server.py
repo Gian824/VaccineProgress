@@ -12,7 +12,7 @@ app.add_api("Gian824-VaccineProgressionAPI-0.0-oas3-resolved-2.yaml")
 # create a URL route in our application for "/"
 @app.route("/")
 def home():
-    msg = {"server-msg": "It's working!"}
+    msg = {"server-msg": "To look up Country, add '/Assistance/CountryName' after port."}
 
     return jsonify(msg)
 

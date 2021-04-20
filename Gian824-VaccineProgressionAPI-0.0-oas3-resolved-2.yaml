@@ -63,12 +63,12 @@ paths:
   /Assistance/<arg1>:
     get:
       tags:
-      - TEST3
-      description: test3
-      operationId: VaccineProgress.test3
+      - Assistance
+      description: Assistance
+      operationId: VaccineProgress.Assistance
       responses:
         "200":
-          description: test3
+          description: Assistance
           content:
             application/json:
               schema: {}
